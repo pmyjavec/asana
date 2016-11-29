@@ -1,5 +1,7 @@
 defmodule Asana.Pose do
   use Ecto.Schema
+  import Ecto.Query
+  alias Asana.Repo
 
   # weather is the DB table
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -15,4 +17,9 @@ defmodule Asana.Pose do
 
   @required_fields ~w(name description difficulty_rating)
   @optional_fields ~w(keywords)
+
+  def search(term) do
+    query = from(u in Asana.Pose, where: fragment("to_tsvector(keywords || ' ' || name || ' ' || description) @@ to_tsquery(?)", ^term))
+    Repo.all query
+  end
 end
