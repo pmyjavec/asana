@@ -2,6 +2,15 @@
 # and its dependencies with the aid of the Mix.Config module.
 use Mix.Config
 
+config :asana, Asana.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  database: "asana_asana_repo",
+  username: "postgres",
+  password: "postgres",
+  hostname: "localhost"
+
+config :asana, ecto_repos: [Asana.Repo]
+
 # This configuration is loaded before any dependency and is restricted
 # to this project. If another project depends on this project, this
 # file won't be loaded nor affect the parent project. For this reason,
@@ -11,7 +20,7 @@ use Mix.Config
 # You can configure for your application as:
 #
 #     config :asana, key: :value
-      config :asana, port: 4000
+config :asana, port: 4000
 #
 # And access this configuration in your application as:
 #

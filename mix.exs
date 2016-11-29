@@ -16,7 +16,7 @@ defmodule Asana.Mixfile do
   def application do
     [
       mod: {Asana, []},
-      applications: [:logger, :cowboy, :plug]
+      applications: [:logger, :cowboy, :plug, :postgrex, :ecto]
     ]
   end
 
@@ -32,7 +32,9 @@ defmodule Asana.Mixfile do
   def deps do
     [{:cowboy, "~> 1.0.0"},
      {:plug, "~> 1.0"},
-     {:poison, "~> 3.0"},
+     {:poison, "~> 2.0"},
+     {:ecto, "~> 2.0"},
+     {:postgrex, ">= 0.0.0"}
    ]
   end
 end

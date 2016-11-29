@@ -13,7 +13,7 @@ For example if someone has a cold or flu they can query the API for list of pose
     | $ mix deps.build
 
 ### Start the server
-    | $ mix run
+    | $ iex -S mix
 
 ### Running Tests
 
@@ -35,4 +35,20 @@ TBA
 
 ## API Documentation
 
-TBA
+### GET /poses
+
+Returns a list of all possible Yoga poses.
+
+### GET /poses/:id
+
+Returns a list of all possible Yoga poses.
+
+### GET /poses/search?query={terms}
+
+Searches through all poses and finds the best pose based on an ailment.
+
+### Versioning
+
+Choose a version by setting the `Accept-Version` header, for example `Accept-Version: 1`.
+
+This is not required right now as there is only one version, although this could be subject to change so specify a version to future proof.

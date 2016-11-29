@@ -8,7 +8,8 @@ defmodule Asana do
 
     children = [
       # Define workers and child supervisors to be supervised
-      Plug.Adapters.Cowboy.child_spec(:http, Asana.Router, [], [port: Application.get_env(:asana, :port)])
+      Plug.Adapters.Cowboy.child_spec(:http, Asana.API , [], [port: Application.get_env(:asana, :port)]),
+      supervisor(Asana.Repo, [])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
