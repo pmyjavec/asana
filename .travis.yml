@@ -1,0 +1,11 @@
+sudo: required
+language: elixir
+elixir:
+  - 1.2.2
+services:
+  - docker
+
+after_success:
+ - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+ - docker build . -t pmyjavec/asana
+ - docker push pmyjavec/asana

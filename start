@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+mix run priv/repo/seed.exs
+iex -S mix
