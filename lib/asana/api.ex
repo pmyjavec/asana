@@ -41,12 +41,26 @@ defmodule Asana.API do
 
   get "/search" do
     conn |> fetch_query_params
+    qp = conn.query_params
 
-    q = conn.query_params["q"] || ""
-    poses = Asana.Pose.search(q)
-    resp_data = Enum.map(poses, fn(p) -> Response.new(p.id, burl(conn) <> "/" <> p.id) end)
+    case Map.has_key?(qp, "q") do
+      true ->
+        poses = Asana.Pose.search("'" <> qp["q"] <> "'")
+        resp_data = Enum.map(poses, fn(p) -> Response.new(p.id, burl(conn) <> "/" <> p.id) end)
 
-    conn |> json(%{data: [resp_data]})
+        conn |> json(%{data: [resp_data]})
+      _ ->
+        error = %{
+          status: "400",
+          title: "Missing or incorrect search query",
+          detail: "A search query needs to be specified, try ?q=<keywords>,",
+          source: %{"pointer": burl(conn)}
+        }
+
+        conn
+          |> put_status(400)
+          |> json(%{errors: [error]})
+    end
   end
 
   match _ do
