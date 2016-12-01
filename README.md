@@ -12,7 +12,7 @@ For example if someone has a cold or flu, they can search the API for list of po
 
 ### Web-service
 
-Asana is written in the very popular [Elixir language](http://elixir-lang.org/). Elixir was chosen because of it's highly scalable, fault tolerant nature, coupled with beautiful syntax and excellent libraries for building modern web applications with little time investment. It's an interesting language.
+Asana is written in the relatively new, but ever more popular [Elixir language](http://elixir-lang.org/). Elixir because of it's highly scalable, fault tolerant nature, coupled with beautiful syntax and excellent libraries for building modern web applications with little time investment. It's an interesting language.
 
 To keep the code base small and easy to maintain, no heavy frameworks have been used. Only a few libraries:
 
@@ -30,7 +30,7 @@ I've primarily leaned on Docker for deployment of the application instances, I'v
 
 Official Elixir images are available and so very little time investment was needed order to get a working image deployed.
 
-Docker images are build from Travis CI builds and pushed out to [Docker Hub](https://hub.docker.com/r/pmyjavec/asana/) and then deployed to a target host of your choice using Ansible. See the deployment section for more information.
+Docker images are built from Travis CI builds and pushed out to [Docker Hub](https://hub.docker.com/r/pmyjavec/asana/), then deployed to a target host of your choice using Ansible. See the deployment section for more information.
 
 ## API Documentation
 
@@ -73,7 +73,7 @@ Returns a list of all possible yoga poses.
 
 ### GET /poses/:id
 
-Returns a specific possible yoga poses.
+Returns an individual yoga poses.
 
 ### GET /search?q={term}
 
@@ -87,7 +87,7 @@ Currently there is no version headers needed as this is a first version API.
 
 Feel free to send the `Accept-Version` header, for example `Accept-Version: 1`, if you don't want to automatically get bumped to new versions in the future.
 
-## Deployment Instructions
+## Deployment
 
 The deployment is performed primarily by using [Ansible](http://docs.ansible.com/ansible/index.html), Ansible is executed from local workstation and runs the deployment over SSH, you can find installation instructions for Ansible [here](http://docs.ansible.com/ansible/intro_installation.html)
 
