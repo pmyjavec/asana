@@ -6,3 +6,6 @@
 
 - src: ANXS.postgresql
   name: postgresql
+
+- src: geerlingguy.nginx
+  name: nginx

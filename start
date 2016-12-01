@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
 
+mix ecto.migrate
 mix run priv/repo/seed.exs
-iex -S mix
+mix run --no-halt

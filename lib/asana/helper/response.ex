@@ -20,6 +20,15 @@ defmodule Asana.Helper.Response do
   Returns the "base_url", example http://localhost:4000/
   """
   def burl(c) do
-    Atom.to_string(c.scheme) <> "://" <> c.host <> ":" <> Integer.to_string(c.port) <> c.request_path
+    port = case c.port do
+      443  ->
+       ""
+      80 ->
+       ""
+      _ ->
+        ":" <> Integer.to_string(c.port)
+    end
+
+    Atom.to_string(c.scheme) <> "://" <> c.host <> port <> c.request_path
   end
 end

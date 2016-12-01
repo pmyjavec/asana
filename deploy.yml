@@ -10,6 +10,18 @@
   roles:
     - docker
     - postgresql
+    - nginx
+
+  post_tasks:
+  - name: Deploy Asana Instance
+    docker:
+      name: "asana"
+      image: "pmyjavec/asana"
+      net: "host"
+      env:
+        DB_USERNAME: "asana"
+        DB_PASSWORD: "asana"
+        DB_HOSTNAME: "localhost"
 
   # Configuration variables can be used to change the behaviour of roles,
   # for example specify versions to install, or change the way a configuration file is generated.
@@ -30,3 +42,14 @@
         db: asana_asana_repo
         priv: "ALL"
         role_attr_flags: "CREATEDB"
+    nginx_remove_default_vhost: true
+    nginx_vhosts:
+      - listen: "80 default_server"
+        server_name: "{{ ansible_hostname }}"
+        root: "/var/www/example.com"
+        index: "index.php index.html index.htm"
+        extra_parameters: |
+           location / {
+               proxy_pass http://127.0.0.1:4000;
+               proxy_set_header Host  $host;
+           }

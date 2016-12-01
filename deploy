@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+set -e
+set -o pipefail
+
+show_help() {
+            echo "Usage: deploy -u <Remote SSH user> -t <Target host for deployment>"
+}
+
+function error() {
+    echo "[ERROR] => $@" >&2;
+}
+
+function info() {
+    echo "[INFO] => $@"
+}
+
+while getopts ":u:t:h" opt; do
+    case $opt in
+        u)
+            DEPLOY_USER=$OPTARG
+            ;;
+        t)
+            DEPLOY_TARGET=$OPTARG
+            ;;
+        h)
+            show_help
+            exit 0
+            ;;
+        \?)
+            error "Unknown option: -$OPTARG"
+            exit 1
+            ;;
+        :)
+            error "Option, $OPTARG requires an argument."
+            exit 1
+            ;;
+    esac
+done
+shift $((OPTIND-1))
+
+if [[ -z ${DEPLOY_USER+x} || -z ${DEPLOY_TARGET+x} ]]; then
+    show_help >&2
+    exit 1
+fi
+info "Deploying to ${DEPLOY_TARGET} as user: ${DEPLOY_USER}"
+info 'Install all community modules Ansible. See https://galaxy.ansible.com/ for more on this step.'
+ansible-galaxy install -r roles.yml -p roles || { error 'Installation of Ansible community roles failed' ; exit 1; }
+
+info 'Installing the python-minimal package on the remote host'
+ssh -o 'ConnectTimeout=300' $DEPLOY_USER@$DEPLOY_TARGET sudo apt-get update -y || { error 'apt-get update failed' ; exit 1; }
+ssh -o 'ConnectTimeout=300' $DEPLOY_USER@$DEPLOY_TARGET sudo apt-get install -y python-minimal || { error 'Installation of python-minimal failed on the remote host' ; exit 1; }
+info "Done installing python-minimal"
+
+info 'Installing the python-minimal package on the remote host'
+ansible-playbook -i "$DEPLOY_TARGET," -u $DEPLOY_USER deploy.yml || { echo '=> Installation of python-minimal failed' ; exit 1; }
+info "Deployment complete! Visit http://${DEPLOY_TARGET}"

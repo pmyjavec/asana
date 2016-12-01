@@ -2,40 +2,35 @@
 
 _A RESTful Web Service for Yogis._
 
+[![Build Status](https://travis-ci.org/pmyjavec/asana.svg?branch=master)](https://travis-ci.org/pmyjavec/asana)
+
 Asana is a search engine for yogis, it helps yoga practitioners find poses to assist in the treatment of various ailments.
 
 For example if someone has a cold or flu, they can search the API for list of poses to help alleviate symptoms, such as headstand (sirsasana).
 
-## Getting Started and Contributing
-
-### Setup
-
-You will need a working copy of Elixir, 1.3 is recommended.
-
-#### Install Dependencies
-
-    $ mix deps.get
-    $ mix deps.build
-    $ mix run priv/repo/seed.exs
-
-#### Running Tests
-
-    $ mix test
-
-#### Start the server
-
-    $ iex -S mix
-    $ curl http://locahost:4000
-
 ## Design Considerations
 
-Asana is written in the very popular [Elixir language](http://elixir-lang.org/). Elixir was chosen because of it's highly scalable, fault tolerant properties, coupled with beautiful syntax and excellent support for building web applications.
+### Web-service
+
+Asana is written in the very popular [Elixir language](http://elixir-lang.org/). Elixir was chosen because of it's highly scalable, fault tolerant nature, coupled with beautiful syntax and excellent libraries for building modern web applications with little time investment. It's an interesting language.
 
 To keep the code base small and easy to maintain, no heavy frameworks have been used. Only a few libraries:
 
  - [Plug](https://github.com/elixir-lang/plug) to route and handles requests.
  - [Ecto](https://github.com/elixir-ecto/ecto) for interfacing with SQL databases.
  - [Poison](https://github.com/devinus/poison) for handling JSON.
+
+### Searching
+
+Searching, I was able to leverage the [full-text search capabilities](https://www.postgresql.org/docs/current/static/textsearch.html) available in PostgreSQL, which were actually quite impressive.
+
+### Deployment
+
+I've primarily leaned on Docker for deployment of the application instances, I've had very good experience with Docker in the past and felt like it was a good fit for deployment of such as light-weight, stateless web-service.
+
+Official Elixir images are available and so very little time investment was needed order to get a working image deployed.
+
+Docker images are build from Travis CI builds and pushed out to [Docker Hub](https://hub.docker.com/r/pmyjavec/asana/) and then deployed to a target host of your choice using Ansible. See the deployment section for more information.
 
 ## API Documentation
 
@@ -88,19 +83,47 @@ For example, `$ curl http://localhost:4000/search?q=flu`
 
 ### Versioning
 
-Choose a version by setting the `Accept-Version` header, for example `Accept-Version: 1`.
+Currently there is no version headers needed as this is a first version API.
 
-This is not required right now as there is only one version, although this could be subject to change so specify a version to future proof.
+Feel free to send the `Accept-Version` header, for example `Accept-Version: 1`, if you don't want to automatically get bumped to new versions in the future.
 
 ## Deployment Instructions
 
-Deployment is performed using Ansible, Ansible is executed from local workstation, you can find installation instructions [here](http://docs.ansible.com/ansible/intro_installation.html)
+The deployment is performed primarily by using [Ansible](http://docs.ansible.com/ansible/index.html), Ansible is executed from local workstation and runs the deployment over SSH, you can find installation instructions for Ansible [here](http://docs.ansible.com/ansible/intro_installation.html)
 
-The steps taken to install deploy Asana can be found inside `deploy.yml`.
+### Pre-requisites
 
-Before running the deployment additional community built [roles](http://docs.ansible.com/ansible/playbooks_roles.html) are required, install those with:
+    * To be able to login to the target server without a password.
+    * The user used to run the deployment must either be root, or able to run sudo commands as root.
+    * The latest Ansible installed.
+    * The target host needs the `python-minimal` package installed. _The deploy script will install python for you._
+    * The target host is _64 bit_
 
-    ansible-galaxy install -r roles.yml -p roles
+### Running the deployment
 
+The script is fairly well commented, so checkout the script contents for details on it's workings.
 
+     git clone https://github.com/pmyjavec/asana
+     cd asana
+    ./deploy
 
+## Contributing
+
+### Setup
+
+You will need a working copy of Elixir, 1.3 is recommended.
+
+#### Install Deps
+
+    $ mix deps.get
+    $ mix deps.build
+    $ mix run priv/repo/seed.exs
+
+#### Running Tests
+
+    $ mix test
+
+#### Start the server
+
+    $ iex -S mix
+    $ curl http://locahost:4000
