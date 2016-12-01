@@ -37,10 +37,6 @@ To keep the code base small and easy to maintain, no heavy frameworks have been 
  - [Ecto](https://github.com/elixir-ecto/ecto) for interfacing with SQL databases.
  - [Poison](https://github.com/devinus/poison) for handling JSON.
 
-## Deployment Instructions
-
-TBA
-
 ## API Documentation
 
 The Asana HTTP service is a [RESTful](https://en.wikipedia.org/wiki/Representational_state_transfer), [JSON](https://en.wikipedia.org/wiki/JSON) API and will respond with appropriate content type headers:
@@ -95,3 +91,16 @@ For example, `$ curl http://localhost:4000/search?q=flu`
 Choose a version by setting the `Accept-Version` header, for example `Accept-Version: 1`.
 
 This is not required right now as there is only one version, although this could be subject to change so specify a version to future proof.
+
+## Deployment Instructions
+
+Deployment is performed using Ansible, Ansible is executed from local workstation, you can find installation instructions [here](http://docs.ansible.com/ansible/intro_installation.html)
+
+The steps taken to install deploy Asana can be found inside `deploy.yml`.
+
+Before running the deployment additional community built [roles](http://docs.ansible.com/ansible/playbooks_roles.html) are required, install those with:
+
+    ansible-galaxy install -r roles.yml -p roles
+
+
+

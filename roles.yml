@@ -1,0 +1,8 @@
+# Roles for use with Ansible
+# Install roles with ansible-galaxy
+
+- src: angstwad.docker_ubuntu
+  name: docker
+
+- src: ANXS.postgresql
+  name: postgresql

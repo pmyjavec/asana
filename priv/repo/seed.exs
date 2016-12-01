@@ -5,6 +5,13 @@ alias Asana.Pose
 #
 #     mix run priv/repo/seeds.exs
 #
+case Repo.all(Pose) do
+  [] ->
+    IO.puts "Seeding, nothing found"
+  _ ->
+    IO.puts "Not seeding, DB already populated"
+    exit(:shutdown)
+end
 
 for pose <- [
   %Pose{

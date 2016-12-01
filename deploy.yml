@@ -1,0 +1,32 @@
+---
+# Playbook to deploying the TICK stack
+  # Deploy to all hosts
+- hosts: all
+  # Run commands as sudo
+  become: true
+
+  # All components of the stack are deployed with respective roles, inside the roles/ directory.
+  # http://docs.ansible.com/ansible/playbooks_roles.html for more on roles.
+  roles:
+    - docker
+    - postgresql
+
+  # Configuration variables can be used to change the behaviour of roles,
+  # for example specify versions to install, or change the way a configuration file is generated.
+  # For a list of defaults, see roles/<name>/defaults/.
+  vars:
+    postgresql_databases:
+      - name: asana_asana_repo
+        owner: asana
+        hstore: yes
+        uuid_ossp: yes
+        citext: yes
+    postgresql_users:
+      - name: asana
+        pass: asana
+        encrypted: no
+    postgresql_user_privileges:
+      - name: asana
+        db: asana_asana_repo
+        priv: "ALL"
+        role_attr_flags: "CREATEDB"
